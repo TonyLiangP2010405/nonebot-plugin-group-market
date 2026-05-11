@@ -1,0 +1,50 @@
+[project]
+name = "nonebot-plugin-slave-market"
+version = "0.1.0"
+description = "群友市场/奴隶市场 - 群聊文字游戏插件 (从 Yunzai-Bot 移植)"
+readme = "README.md"
+license = {text = "Mulan PSL v2"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Tony"}
+]
+keywords = ["nonebot", "nonebot2", "game", "slave-market", "group-game", "yunzai"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: Mulan Permissive Software License v2 (MulanPSL-2.0)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Communications :: Chat",
+]
+dependencies = [
+    "nonebot2>=2.2.0",
+    "nonebot-adapter-onebot>=2.0.0",
+    "nonebot-plugin-apscheduler>=0.5.0",
+    "nonebot-plugin-localstore>=0.7.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "PyYAML>=6.0",
+    "aiofiles>=23.0.0",
+    "typing-extensions>=4.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/TonyLiangP2010405/nonebot-plugin-slave-market"
+Repository = "https://github.com/TonyLiangP2010405/nonebot-plugin-slave-market"
+
+[project.entry-points."nonebot.plugin"]
+nonebot_plugin_slave_market = "nonebot_plugin_slave_market"
+
+[tool.nonebot]
+plugins = ["nonebot_plugin_slave_market"]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nonebot_plugin_slave_market*"]
