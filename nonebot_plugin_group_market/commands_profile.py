@@ -6,8 +6,8 @@ from nonebot.params import CommandArg
 from .storage import ensure_player, load_player
 from .utils import get_member_nickname
 from .extension.config import ext_config
-from .extension.utils import get_level_threshold, format_level_bar, get_today_event
-from .extension.group_storage import ensure_group_data
+from .extension.utils import get_level_threshold, format_level_bar
+from .extension.group_storage import ensure_group_data, get_today_event
 from .extension.anti_spam import check_cooldown
 
 profile_cmd = on_command("我的信息", aliases={"个人信息", "个人面板"}, priority=5, block=True)
