@@ -8,6 +8,7 @@ from .storage import ensure_player, save_player
 from .utils import get_member_nickname
 from .extension.config import ext_config
 from .extension.utils import get_today_str, add_exp, generate_daily_tasks
+from .extension.anti_spam import check_cooldown
 
 daily_task_cmd = on_command("每日任务", aliases={"任务", "我的任务"}, priority=5, block=True)
 claim_task_reward_cmd = on_command("领取任务奖励", aliases={"领取每日奖励"}, priority=5, block=True)
@@ -27,6 +28,12 @@ async def ensure_daily_tasks(data: dict):
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await daily_task_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "daily_task")
+    if not allowed:
+        if msg:
+            await daily_task_cmd.finish(msg)
+        return
 
     if not ext_config.dailyTask.enabled:
         await daily_task_cmd.finish("每日任务系统已关闭")
@@ -64,6 +71,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await claim_task_reward_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "claim_task_reward")
+    if not allowed:
+        if msg:
+            await claim_task_reward_cmd.finish(msg)
+        return
 
     if not ext_config.dailyTask.enabled:
         await claim_task_reward_cmd.finish("每日任务系统已关闭")
@@ -107,6 +120,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await refresh_task_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "refresh_task")
+    if not allowed:
+        if msg:
+            await refresh_task_cmd.finish(msg)
+        return
 
     if not ext_config.dailyTask.enabled:
         await refresh_task_cmd.finish("每日任务系统已关闭")

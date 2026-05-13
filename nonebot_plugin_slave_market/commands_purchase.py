@@ -10,6 +10,7 @@ from .utils import get_member_nickname, check_permission
 from .extension.config import ext_config
 from .extension.utils import give_exp_and_track
 from .extension.group_storage import record_season_stat
+from .extension.anti_spam import check_cooldown
 
 purchase_cmd = on_command("购买群友", aliases={"购买奴隶"}, priority=5, block=True)
 
@@ -17,6 +18,12 @@ purchase_cmd = on_command("购买群友", aliases={"购买奴隶"}, priority=5, 
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await purchase_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "purchase")
+    if not allowed:
+        if msg:
+            await purchase_cmd.finish(msg)
+        return
 
     group_id = event.group_id
     user_id = event.user_id

@@ -8,6 +8,7 @@ from nonebot.params import CommandArg
 from .config import plugin_config
 from .storage import ensure_player, load_player, save_player, list_group_players
 from .utils import get_member_nickname, check_permission
+from .extension.anti_spam import check_cooldown
 
 rob_cmd = on_command("抢劫", aliases={"rob"}, priority=5, block=True)
 
@@ -15,6 +16,12 @@ rob_cmd = on_command("抢劫", aliases={"rob"}, priority=5, block=True)
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await rob_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "rob")
+    if not allowed:
+        if msg:
+            await rob_cmd.finish(msg)
+        return
 
     group_id = event.group_id
     user_id = event.user_id

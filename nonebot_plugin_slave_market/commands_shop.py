@@ -7,6 +7,7 @@ from .storage import ensure_player, save_player
 from .utils import get_member_nickname
 from .extension.config import ext_config
 from .extension.utils import get_item_info, get_item_name, give_item, consume_item, random_box_reward
+from .extension.anti_spam import check_cooldown
 
 shop_cmd = on_command("商店", aliases={"道具商店", "商城"}, priority=5, block=True)
 buy_item_cmd = on_command("购买道具", aliases={"买道具"}, priority=5, block=True)
@@ -19,6 +20,12 @@ gift_item_cmd = on_command("赠送道具", priority=5, block=True)
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await shop_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "shop")
+    if not allowed:
+        if msg:
+            await shop_cmd.finish(msg)
+        return
 
     if not ext_config.shop.enabled:
         await shop_cmd.finish("商店系统已关闭")
@@ -41,6 +48,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await buy_item_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "buy_item")
+    if not allowed:
+        if msg:
+            await buy_item_cmd.finish(msg)
+        return
 
     if not ext_config.shop.enabled:
         await buy_item_cmd.finish("商店系统已关闭")
@@ -91,6 +104,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await my_items_cmd.finish("该指令仅群聊可用")
 
+    allowed, msg = check_cooldown(event, "my_items")
+    if not allowed:
+        if msg:
+            await my_items_cmd.finish(msg)
+        return
+
     if not ext_config.shop.enabled:
         await my_items_cmd.finish("商店系统已关闭")
 
@@ -118,6 +137,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await use_item_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "use_item")
+    if not allowed:
+        if msg:
+            await use_item_cmd.finish(msg)
+        return
 
     if not ext_config.shop.enabled:
         await use_item_cmd.finish("商店系统已关闭")
@@ -181,6 +206,12 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await gift_item_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "gift_item")
+    if not allowed:
+        if msg:
+            await gift_item_cmd.finish(msg)
+        return
 
     if not ext_config.shop.enabled:
         await gift_item_cmd.finish("商店系统已关闭")

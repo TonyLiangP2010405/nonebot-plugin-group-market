@@ -7,6 +7,7 @@ from .storage import ensure_player, save_player
 from .utils import get_member_nickname
 from .extension.config import ext_config
 from .extension.utils import get_title_info
+from .extension.anti_spam import check_cooldown
 
 title_cmd = on_command("我的称号", aliases={"称号", "称号列表"}, priority=5, block=True)
 equip_title_cmd = on_command("佩戴称号", priority=5, block=True)
@@ -16,6 +17,12 @@ equip_title_cmd = on_command("佩戴称号", priority=5, block=True)
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await title_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "title")
+    if not allowed:
+        if msg:
+            await title_cmd.finish(msg)
+        return
 
     if not ext_config.title.enabled:
         await title_cmd.finish("称号系统已关闭")
@@ -68,6 +75,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await equip_title_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "equip_title")
+    if not allowed:
+        if msg:
+            await equip_title_cmd.finish(msg)
+        return
 
     if not ext_config.title.enabled:
         await equip_title_cmd.finish("称号系统已关闭")

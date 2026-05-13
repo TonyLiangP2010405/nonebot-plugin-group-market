@@ -11,6 +11,7 @@ from .utils import get_member_nickname, check_permission
 from .extension.config import ext_config
 from .extension.utils import get_work_income_multiplier, give_exp_and_track
 from .extension.group_storage import record_season_stat, get_today_event
+from .extension.anti_spam import check_cooldown
 
 work_cmd = on_command("打工", aliases={"工作", "一键打工"}, priority=5, block=True)
 
@@ -18,6 +19,12 @@ work_cmd = on_command("打工", aliases={"工作", "一键打工"}, priority=5, 
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await work_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "work")
+    if not allowed:
+        if msg:
+            await work_cmd.finish(msg)
+        return
 
     group_id = event.group_id
     user_id = event.user_id

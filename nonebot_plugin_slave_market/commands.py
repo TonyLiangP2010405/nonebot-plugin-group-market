@@ -31,5 +31,9 @@ from .commands_randomevent import today_event_cmd
 from .commands_title import title_cmd, equip_title_cmd
 from .commands_bounty import bounty_post_cmd, bounty_list_cmd, bounty_claim_cmd, bounty_cancel_cmd
 from .commands_season import season_info_cmd, season_rank_cmd, season_reward_cmd, season_history_cmd
+from .commands_admin import (
+    admin_cooldown_status, admin_enable_quiet, admin_disable_quiet,
+    admin_enable_spam, admin_disable_spam, admin_set_work_cd, admin_set_group_cd
+)
 
 logger.info("[SlaveMarket] 指令模块已注册")

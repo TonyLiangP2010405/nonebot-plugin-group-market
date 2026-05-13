@@ -105,6 +105,25 @@ class ProfileConfig(BaseModel):
     enabled: bool = Field(default=True, description="个人信息面板开关")
 
 
+class GroupFloodProtectionConfig(BaseModel):
+    enabled: bool = Field(default=True, description="群洪水保护开关")
+    windowSeconds: int = Field(default=60, description="统计窗口秒数")
+    maxCommands: int = Field(default=20, description="窗口期内最大命令数")
+    lockSeconds: int = Field(default=300, description="锁定持续时间")
+
+
+class QuietModeConfig(BaseModel):
+    enabled: bool = Field(default=True, description="安静模式总开关")
+    cooldownReplyInterval: int = Field(default=60, description="冷却提示间隔秒数")
+
+
+class AntiSpamConfig(BaseModel):
+    enabled: bool = Field(default=True, description="防刷屏总开关")
+    quietMode: QuietModeConfig = Field(default_factory=QuietModeConfig)
+    groupGlobalCooldown: bool = Field(default=True, description="群全局冷却开关")
+    groupFloodProtection: GroupFloodProtectionConfig = Field(default_factory=GroupFloodProtectionConfig)
+
+
 class GameplayExtensionConfig(BaseModel):
     """扩展玩法总配置"""
     signIn: SignInConfig = Field(default_factory=SignInConfig)
@@ -117,6 +136,7 @@ class GameplayExtensionConfig(BaseModel):
     bounty: BountyConfig = Field(default_factory=BountyConfig)
     season: SeasonConfig = Field(default_factory=SeasonConfig)
     profile: ProfileConfig = Field(default_factory=ProfileConfig)
+    antiSpam: AntiSpamConfig = Field(default_factory=AntiSpamConfig)
 
 
 ext_config = get_plugin_config(GameplayExtensionConfig)

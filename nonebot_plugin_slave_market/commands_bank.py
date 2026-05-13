@@ -8,6 +8,7 @@ from nonebot.params import CommandArg
 from .config import plugin_config
 from .storage import ensure_player, load_player, save_player
 from .utils import get_member_nickname
+from .extension.anti_spam import check_cooldown
 
 deposit_cmd = on_command("存款", aliases={"一键存款"}, priority=5, block=True)
 withdraw_cmd = on_command("取款", priority=5, block=True)
@@ -21,6 +22,12 @@ transfer_cmd = on_command("转账", priority=5, block=True)
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await deposit_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "deposit")
+    if not allowed:
+        if msg:
+            await deposit_cmd.finish(msg)
+        return
 
     group_id = event.group_id
     user_id = event.user_id
@@ -74,6 +81,12 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await withdraw_cmd.finish("该指令仅群聊可用")
 
+    allowed, msg = check_cooldown(event, "withdraw")
+    if not allowed:
+        if msg:
+            await withdraw_cmd.finish(msg)
+        return
+
     group_id = event.group_id
     user_id = event.user_id
     nickname = await get_member_nickname(bot, group_id, user_id)
@@ -109,6 +122,12 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await upgrade_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "upgrade")
+    if not allowed:
+        if msg:
+            await upgrade_cmd.finish(msg)
+        return
 
     group_id = event.group_id
     user_id = event.user_id
@@ -159,6 +178,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await bank_info_cmd.finish("该指令仅群聊可用")
 
+    allowed, msg = check_cooldown(event, "bank_info")
+    if not allowed:
+        if msg:
+            await bank_info_cmd.finish(msg)
+        return
+
     group_id = event.group_id
     user_id = event.user_id
     nickname = await get_member_nickname(bot, group_id, user_id)
@@ -189,6 +214,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await interest_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "interest")
+    if not allowed:
+        if msg:
+            await interest_cmd.finish(msg)
+        return
 
     group_id = event.group_id
     user_id = event.user_id
@@ -223,6 +254,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await transfer_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "transfer")
+    if not allowed:
+        if msg:
+            await transfer_cmd.finish(msg)
+        return
 
     group_id = event.group_id
     user_id = event.user_id

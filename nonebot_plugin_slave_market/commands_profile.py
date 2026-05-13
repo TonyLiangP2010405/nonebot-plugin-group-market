@@ -8,6 +8,7 @@ from .utils import get_member_nickname
 from .extension.config import ext_config
 from .extension.utils import get_level_threshold, format_level_bar, get_today_event
 from .extension.group_storage import ensure_group_data
+from .extension.anti_spam import check_cooldown
 
 profile_cmd = on_command("我的信息", aliases={"个人信息", "个人面板"}, priority=5, block=True)
 view_profile_cmd = on_command("查看信息", priority=5, block=True)
@@ -17,6 +18,12 @@ view_profile_cmd = on_command("查看信息", priority=5, block=True)
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await profile_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "profile")
+    if not allowed:
+        if msg:
+            await profile_cmd.finish(msg)
+        return
 
     if not ext_config.profile.enabled:
         await profile_cmd.finish("个人信息面板已关闭")
@@ -33,6 +40,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await view_profile_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "view_profile")
+    if not allowed:
+        if msg:
+            await view_profile_cmd.finish(msg)
+        return
 
     if not ext_config.profile.enabled:
         await view_profile_cmd.finish("个人信息面板已关闭")

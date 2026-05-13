@@ -10,6 +10,7 @@ from .utils import get_member_nickname, check_permission
 from .extension.config import ext_config
 from .extension.utils import give_exp_and_track
 from .extension.group_storage import record_season_stat
+from .extension.anti_spam import check_cooldown
 
 arena_cmd = on_command("决斗", priority=5, block=True)
 
@@ -18,6 +19,12 @@ arena_cmd = on_command("决斗", priority=5, block=True)
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await arena_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "duel")
+    if not allowed:
+        if msg:
+            await arena_cmd.finish(msg)
+        return
 
     group_id = event.group_id
     user_id = event.user_id

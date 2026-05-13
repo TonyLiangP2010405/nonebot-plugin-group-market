@@ -9,6 +9,7 @@ from .config import plugin_config
 from .storage import load_player, save_player, list_groups, list_group_players
 from .storage import save_weekly_reset_tracking, load_weekly_reset_tracking, save_ranking_history, get_last_week_ranking_history
 from .utils import get_member_nickname, check_permission
+from .extension.anti_spam import check_cooldown
 
 reset_status_cmd = on_command("奴隶重置状态", priority=5, block=True)
 manual_reset_cmd = on_command("手动奴隶重置", priority=5, block=True)
@@ -20,6 +21,12 @@ last_week_cmd = on_command("上周排行榜", priority=5, block=True)
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await reset_status_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "reset_status")
+    if not allowed:
+        if msg:
+            await reset_status_cmd.finish(msg)
+        return
 
     cfg = plugin_config.weeklyReset
     now = datetime.now()
@@ -50,6 +57,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await manual_reset_cmd.finish("该指令仅群聊可用")
 
+    allowed, msg = check_cooldown(event, "manual_reset")
+    if not allowed:
+        if msg:
+            await manual_reset_cmd.finish(msg)
+        return
+
     # 权限检查
     if not check_permission(event):
         # 检查群管理员
@@ -69,6 +82,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await reset_help_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "reset_help")
+    if not allowed:
+        if msg:
+            await reset_help_cmd.finish(msg)
+        return
 
     cfg = plugin_config.weeklyReset
     await reset_help_cmd.finish(
@@ -91,6 +110,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await last_week_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "last_week")
+    if not allowed:
+        if msg:
+            await last_week_cmd.finish(msg)
+        return
 
     history = get_last_week_ranking_history(event.group_id)
     if not history:

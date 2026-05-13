@@ -6,6 +6,7 @@ from nonebot.params import CommandArg
 
 from .storage import ensure_player, load_player, save_player, player_exists
 from .utils import get_member_nickname
+from .extension.anti_spam import check_cooldown
 
 myslave_cmd = on_command("我的奴隶", aliases={"我的群友"}, priority=5, block=True)
 release_cmd = on_command("放生奴隶", priority=5, block=True)
@@ -15,6 +16,12 @@ release_cmd = on_command("放生奴隶", priority=5, block=True)
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await myslave_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "myslave")
+    if not allowed:
+        if msg:
+            await myslave_cmd.finish(msg)
+        return
 
     group_id = event.group_id
     user_id = event.user_id
@@ -51,6 +58,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await release_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "release")
+    if not allowed:
+        if msg:
+            await release_cmd.finish(msg)
+        return
 
     group_id = event.group_id
     user_id = event.user_id

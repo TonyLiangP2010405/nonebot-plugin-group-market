@@ -6,6 +6,7 @@ from .storage import ensure_player, load_player, save_player, list_group_players
 from .utils import get_member_nickname
 from .extension.config import ext_config
 from .extension.utils import check_achievement_unlock, apply_achievement_rewards
+from .extension.anti_spam import check_cooldown
 
 achievement_cmd = on_command("我的成就", aliases={"成就", "成就列表"}, priority=5, block=True)
 achievement_rank_cmd = on_command("成就排行", priority=5, block=True)
@@ -48,6 +49,12 @@ def check_all_achievements(data: dict) -> list:
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await achievement_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "achievement")
+    if not allowed:
+        if msg:
+            await achievement_cmd.finish(msg)
+        return
 
     if not ext_config.achievement.enabled:
         await achievement_cmd.finish("成就系统已关闭")
@@ -95,6 +102,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await achievement_rank_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "achievement_rank")
+    if not allowed:
+        if msg:
+            await achievement_rank_cmd.finish(msg)
+        return
 
     if not ext_config.achievement.enabled:
         await achievement_rank_cmd.finish("成就系统已关闭")

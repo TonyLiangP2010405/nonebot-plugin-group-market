@@ -4,6 +4,7 @@ from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
 
 from .storage import load_player, list_group_players
 from .utils import get_member_nickname
+from .extension.anti_spam import check_cooldown
 
 rankings_cmd = on_command("奴隶市场", aliases={"排行榜"}, priority=5, block=True)
 
@@ -12,6 +13,12 @@ rankings_cmd = on_command("奴隶市场", aliases={"排行榜"}, priority=5, blo
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await rankings_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "rankings")
+    if not allowed:
+        if msg:
+            await rankings_cmd.finish(msg)
+        return
 
     group_id = event.group_id
     players = await list_group_players(group_id)

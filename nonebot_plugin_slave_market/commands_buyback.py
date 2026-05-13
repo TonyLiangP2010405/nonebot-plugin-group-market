@@ -7,6 +7,7 @@ from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
 from .config import plugin_config
 from .storage import ensure_player, load_player, save_player
 from .utils import get_member_nickname, check_permission, format_currency
+from .extension.anti_spam import check_cooldown
 
 buyback_cmd = on_command("回购自己", priority=5, block=True)
 
@@ -14,6 +15,12 @@ buyback_cmd = on_command("回购自己", priority=5, block=True)
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await buyback_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "buyback")
+    if not allowed:
+        if msg:
+            await buyback_cmd.finish(msg)
+        return
 
     group_id = event.group_id
     user_id = event.user_id

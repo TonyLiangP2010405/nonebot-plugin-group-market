@@ -11,6 +11,7 @@ from .extension.group_storage import (
     get_current_season_str, record_season_stat
 )
 from .extension.utils import add_exp
+from .extension.anti_spam import check_cooldown
 
 season_info_cmd = on_command("赛季信息", aliases={"赛季", "当前赛季"}, priority=5, block=True)
 season_rank_cmd = on_command("赛季排行", aliases={"赛季排名", "赛季排行榜"}, priority=5, block=True)
@@ -22,6 +23,12 @@ season_history_cmd = on_command("历史赛季", priority=5, block=True)
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await season_info_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "season_info")
+    if not allowed:
+        if msg:
+            await season_info_cmd.finish(msg)
+        return
 
     if not ext_config.season.enabled:
         await season_info_cmd.finish("赛季系统已关闭")
@@ -44,6 +51,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await season_rank_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "season_rank")
+    if not allowed:
+        if msg:
+            await season_rank_cmd.finish(msg)
+        return
 
     if not ext_config.season.enabled:
         await season_rank_cmd.finish("赛季系统已关闭")
@@ -70,6 +83,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await season_reward_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "season_reward")
+    if not allowed:
+        if msg:
+            await season_reward_cmd.finish(msg)
+        return
 
     if not ext_config.season.enabled:
         await season_reward_cmd.finish("赛季系统已关闭")
@@ -124,6 +143,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await season_history_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "season_history")
+    if not allowed:
+        if msg:
+            await season_history_cmd.finish(msg)
+        return
 
     if not ext_config.season.enabled:
         await season_history_cmd.finish("赛季系统已关闭")

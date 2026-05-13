@@ -26,6 +26,7 @@
 - 👑 称号系统（8个称号，部分带属性加成）
 - 🎯 悬赏系统（发布/领取/取消悬赏）
 - 🏆 赛季系统（周/月赛季排名与奖励）
+- 🛡️ 防刷屏系统（用户冷却、群全局冷却、洪水保护、安静模式）
 
 ## 安装
 
@@ -84,6 +85,13 @@ pip install nonebot-plugin-slave-market
 | #赛季排行 | 赛季排名 |
 | #赛季奖励 | 领取赛季奖励 |
 | #历史赛季 | 历史赛季记录 |
+| #游戏冷却状态 | 查看冷却状态（管理员） |
+| #开启安静模式 | 开启安静模式（管理员） |
+| #关闭安静模式 | 关闭安静模式（管理员） |
+| #开启防刷屏 | 启用防刷屏（管理员） |
+| #关闭防刷屏 | 禁用防刷屏（管理员） |
+| #设置打工冷却 分钟 | 修改打工冷却（管理员） |
+| #设置群游戏间隔 秒 | 修改全局间隔（管理员） |
 
 ## 配置
 
@@ -94,7 +102,26 @@ slavemarket__work__cooldown=3600
 slavemarket__purchase__cooldown=3600
 slavemarket__bank__initialLimit=1000
 slavemarket__weeklyReset__enabled=true
+slavemarket__antiSpam__enabled=true
+slavemarket__antiSpam__quietMode__enabled=true
+slavemarket__antiSpam__groupFloodProtection__enabled=true
+slavemarket__antiSpam__groupFloodProtection__windowSeconds=60
+slavemarket__antiSpam__groupFloodProtection__maxCommands=20
+slavemarket__antiSpam__groupFloodProtection__lockSeconds=300
 ```
+
+## 防刷屏机制
+
+本插件内置多层防刷屏保护：
+
+1. **用户级冷却** — 每个命令每个用户独立冷却
+2. **群全局冷却** — 同一群内游戏命令之间有最小间隔
+3. **洪水保护** — 60秒内超过20条游戏命令自动锁定5分钟
+4. **安静模式** — 冷却期间重复触发只提示一次，之后静默
+5. **查询命令限流** — 排行榜/信息面板等也有冷却
+6. **每日任务低频率** — 任务目标均为"1次"，防止诱导刷屏
+
+管理员可通过 `#游戏冷却状态` 查看当前状态，通过 `#开启安静模式` / `#关闭安静模式` 切换模式。
 
 ## License
 

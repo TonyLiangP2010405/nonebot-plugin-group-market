@@ -6,6 +6,7 @@ from .storage import ensure_player
 from .utils import get_member_nickname
 from .extension.config import ext_config
 from .extension.group_storage import get_today_event, ensure_group_data
+from .extension.anti_spam import check_cooldown
 
 today_event_cmd = on_command("今日事件", aliases={"群事件", "今天事件"}, priority=5, block=True)
 
@@ -14,6 +15,12 @@ today_event_cmd = on_command("今日事件", aliases={"群事件", "今天事件
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await today_event_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "event")
+    if not allowed:
+        if msg:
+            await today_event_cmd.finish(msg)
+        return
 
     if not ext_config.randomEvent.enabled:
         await today_event_cmd.finish("随机事件系统已关闭")

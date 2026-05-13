@@ -6,6 +6,7 @@ from .storage import ensure_player, load_player, save_player, list_group_players
 from .utils import get_member_nickname
 from .extension.config import ext_config
 from .extension.utils import get_level_threshold, format_level_bar
+from .extension.anti_spam import check_cooldown
 
 level_cmd = on_command("我的等级", aliases={"等级信息", "我的信息"}, priority=5, block=True)
 level_rank_cmd = on_command("等级排行", aliases={"等级排行榜"}, priority=5, block=True)
@@ -15,6 +16,12 @@ level_rank_cmd = on_command("等级排行", aliases={"等级排行榜"}, priorit
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await level_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "level")
+    if not allowed:
+        if msg:
+            await level_cmd.finish(msg)
+        return
 
     if not ext_config.level.enabled:
         await level_cmd.finish("等级系统已关闭")
@@ -45,6 +52,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await level_rank_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "level_rank")
+    if not allowed:
+        if msg:
+            await level_rank_cmd.finish(msg)
+        return
 
     if not ext_config.level.enabled:
         await level_rank_cmd.finish("等级系统已关闭")

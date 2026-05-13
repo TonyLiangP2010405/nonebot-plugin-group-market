@@ -7,6 +7,7 @@ from .storage import ensure_player, save_player
 from .utils import get_member_nickname
 from .extension.config import ext_config
 from .extension.utils import get_today_str, add_exp
+from .extension.anti_spam import check_cooldown
 
 signin_cmd = on_command("签到", aliases={"每日签到", "打卡"}, priority=5, block=True)
 signin_rank_cmd = on_command("签到排行", priority=5, block=True)
@@ -16,6 +17,12 @@ signin_rank_cmd = on_command("签到排行", priority=5, block=True)
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await signin_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "signin")
+    if not allowed:
+        if msg:
+            await signin_cmd.finish(msg)
+        return
 
     if not ext_config.signIn.enabled:
         await signin_cmd.finish("签到系统已关闭")
@@ -81,6 +88,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await signin_rank_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "signin_rank")
+    if not allowed:
+        if msg:
+            await signin_rank_cmd.finish(msg)
+        return
 
     if not ext_config.signIn.enabled:
         await signin_rank_cmd.finish("签到系统已关闭")

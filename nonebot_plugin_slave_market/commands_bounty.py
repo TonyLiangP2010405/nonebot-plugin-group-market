@@ -7,6 +7,7 @@ from nonebot.params import CommandArg
 from .storage import ensure_player, load_player, save_player
 from .utils import get_member_nickname
 from .extension.config import ext_config
+from .extension.anti_spam import check_cooldown
 
 bounty_post_cmd = on_command("发布悬赏", priority=5, block=True)
 bounty_list_cmd = on_command("悬赏列表", aliases={"悬�的列表"}, priority=5, block=True)
@@ -31,6 +32,12 @@ async def save_bounty_data(group_id: int, bounties: list):
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await bounty_post_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "bounty_post")
+    if not allowed:
+        if msg:
+            await bounty_post_cmd.finish(msg)
+        return
 
     if not ext_config.bounty.enabled:
         await bounty_post_cmd.finish("悬赏系统已关闭")
@@ -114,6 +121,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
     if not isinstance(event, GroupMessageEvent):
         await bounty_list_cmd.finish("该指令仅群聊可用")
 
+    allowed, msg = check_cooldown(event, "bounty_list")
+    if not allowed:
+        if msg:
+            await bounty_list_cmd.finish(msg)
+        return
+
     if not ext_config.bounty.enabled:
         await bounty_list_cmd.finish("悬赏系统已关闭")
 
@@ -139,6 +152,12 @@ async def _(bot: Bot, event: GroupMessageEvent):
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await bounty_claim_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "bounty_claim")
+    if not allowed:
+        if msg:
+            await bounty_claim_cmd.finish(msg)
+        return
 
     if not ext_config.bounty.enabled:
         await bounty_claim_cmd.finish("悬赏系统已关闭")
@@ -192,6 +211,12 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
 async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     if not isinstance(event, GroupMessageEvent):
         await bounty_cancel_cmd.finish("该指令仅群聊可用")
+
+    allowed, msg = check_cooldown(event, "bounty_cancel")
+    if not allowed:
+        if msg:
+            await bounty_cancel_cmd.finish(msg)
+        return
 
     if not ext_config.bounty.enabled:
         await bounty_cancel_cmd.finish("悬赏系统已关闭")

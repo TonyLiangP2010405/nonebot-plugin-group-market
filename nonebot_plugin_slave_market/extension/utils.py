@@ -163,16 +163,17 @@ def apply_achievement_rewards(data: Dict):
 
 
 def generate_daily_tasks() -> List[Dict]:
-    """生成每日任务列表"""
+    """生成每日任务列表（低频率目标，防止诱导刷屏）"""
     cfg = ext_config.dailyTask
     all_task_types = [
-        {"type": "work", "desc": "打工3次", "target": 3, "weight": 10},
-        {"type": "train", "desc": "训练1次", "target": 1, "weight": 8},
-        {"type": "arena", "desc": "发起决斗1次", "target": 1, "weight": 6},
-        {"type": "purchase", "desc": "购买1名群友", "target": 1, "weight": 5},
-        {"type": "bank_deposit", "desc": "银行存款1次", "target": 1, "weight": 7},
-        {"type": "ranking_view", "desc": "查看排行榜1次", "target": 1, "weight": 4},
-        {"type": "ranking_join", "desc": "完成一次排位赛", "target": 1, "weight": 5},
+        {"type": "work", "desc": "今日完成1次打工", "target": 1, "weight": 10},
+        {"type": "train", "desc": "今日完成1次训练", "target": 1, "weight": 8},
+        {"type": "arena", "desc": "今日发起1次决斗", "target": 1, "weight": 6},
+        {"type": "purchase", "desc": "今日购买1名群友", "target": 1, "weight": 5},
+        {"type": "bank_deposit", "desc": "今日银行存款1次", "target": 1, "weight": 7},
+        {"type": "profile", "desc": "今日查看1次个人信息", "target": 1, "weight": 4},
+        {"type": "ranking_join", "desc": "今日完成1次排位赛", "target": 1, "weight": 5},
+        {"type": "signin", "desc": "今日签到", "target": 1, "weight": 6},
     ]
     selected = []
     weights = [t["weight"] for t in all_task_types]
