@@ -100,3 +100,6 @@ class SlaveMarketConfig(BaseModel):
 
 
 plugin_config = get_plugin_config(SlaveMarketConfig)
+
+# 兼容 NoneBot 商店审核的 Config 别名
+Config = SlaveMarketConfig
