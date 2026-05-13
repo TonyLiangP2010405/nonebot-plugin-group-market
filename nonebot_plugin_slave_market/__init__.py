@@ -36,6 +36,9 @@ __plugin_meta__ = PluginMetadata(
     supported_adapters={"~onebot.v11"},
 )
 
+# 导入扩展配置（确保先加载）
+from . import extension
+
 # 导入所有指令模块（触发注册）
 from . import commands
 
@@ -45,5 +48,8 @@ driver = get_driver()
 async def on_bot_connect():
     logger.info("[SlaveMarket] 群友市场插件加载中...")
     await init_storage()
+    # 确保扩展群数据目录存在
+    from .extension.group_storage import _ensure_dir
+    _ensure_dir()
     start_weekly_reset_scheduler()
     logger.info("[SlaveMarket] 插件已就绪！")

@@ -8,6 +8,9 @@ from nonebot.params import CommandArg
 from .config import plugin_config
 from .storage import load_player, save_player
 from .utils import get_member_nickname, check_permission
+from .extension.config import ext_config
+from .extension.utils import give_exp_and_track
+from .extension.group_storage import record_season_stat
 
 train_cmd = on_command("训练", aliases={"一键训练"}, priority=5, block=True)
 
@@ -65,6 +68,15 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
 
             await save_player(group_id, slave_id, sdata)
 
+        # 扩展追踪
+        success_count = sum(1 for r in results if "成功" in r)
+        user_data["trainSuccessCount"] = user_data.get("trainSuccessCount", 0) + success_count
+        if ext_config.level.enabled:
+            from .extension.utils import add_exp
+            add_exp(user_data, ext_config.level.trainExp * success_count)
+        give_exp_and_track(user_data, 0, "train")
+        await record_season_stat(group_id, user_id, "trainCount", success_count)
+
         user_data["lastTrainedTime"] = now
         await save_player(group_id, user_id, user_data)
         reply = f"📋 {await get_member_nickname(bot, group_id, user_id)} 的一键训练结果:\n" + "\n".join(results)
@@ -97,6 +109,13 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
             increase = int(sdata["value"] * cfg.valueIncreaseRate)
             sdata["value"] += increase
             await save_player(group_id, target_id, sdata)
+            # 扩展追踪
+            user_data["trainSuccessCount"] = user_data.get("trainSuccessCount", 0) + 1
+            if ext_config.level.enabled:
+                from .extension.utils import add_exp
+                add_exp(user_data, ext_config.level.trainExp)
+            give_exp_and_track(user_data, 0, "train")
+            await record_season_stat(group_id, user_id, "trainCount")
             user_data["lastTrainedTime"] = now
             await save_player(group_id, user_id, user_data)
             await train_cmd.finish(f"✅ {sname} 训练成功！\n身价 +{increase}")

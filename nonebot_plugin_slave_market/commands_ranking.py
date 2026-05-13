@@ -8,6 +8,9 @@ from nonebot.params import CommandArg
 from .config import plugin_config
 from .storage import load_player, save_player, list_group_players
 from .utils import get_member_nickname, check_permission
+from .extension.config import ext_config
+from .extension.utils import give_exp_and_track
+from .extension.group_storage import record_season_stat
 
 ranking_info_cmd = on_command("排位赛", priority=5, block=True)
 ranking_join_cmd = on_command("参加排位赛", aliases={"参加排位"}, priority=5, block=True)
@@ -138,7 +141,8 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
 
     ranking = slave_data.setdefault("ranking", {"score": 1000, "tier": "青铜", "matches": 0})
 
-    if random.random() < win_rate:
+    is_win = random.random() < win_rate
+    if is_win:
         # 胜利
         tier_bonus = cfg.tierBonus.get(ranking["tier"], 1)
         reward = int(cfg.baseReward * tier_bonus + cfg.winBonus * slave_data["value"])
@@ -150,11 +154,20 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
         # 失败
         score_change = random.randint(10, 25)
         ranking["score"] = max(0, ranking["score"] - score_change)
+        reward = 0
         result_text = f"😢 失败...\n对手: {opp['name']}\n事件: {event_item['name']}\n得分 -{score_change}"
 
     ranking["tier"] = get_tier(ranking["score"])
     ranking["matches"] = ranking.get("matches", 0) + 1
     user_data["lastRankingTime"] = now
+
+    # 扩展追踪
+    if ext_config.level.enabled:
+        from .extension.utils import add_exp
+        exp_gain = ext_config.level.rankingExp if is_win else ext_config.level.rankingExp // 2
+        add_exp(user_data, exp_gain)
+    give_exp_and_track(user_data, 0, "ranking_join")
+    await record_season_stat(group_id, user_id, "currencyGrowth", reward)
 
     await save_player(group_id, target_id, slave_data)
     await save_player(group_id, user_id, user_data)

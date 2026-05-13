@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-slave-market"
-version = "0.1.0"
+version = "0.2.0"
 description = "群友市场/奴隶市场 - 群聊文字游戏插件 (从 Yunzai-Bot 移植)"
 readme = "README.md"
 license = {text = "Mulan PSL v2"}

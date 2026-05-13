@@ -106,6 +106,21 @@ async def perform_weekly_reset(group_id: int) -> str:
             except (ValueError, Exception):
                 pass
 
+        # 保留的扩展字段
+        old_level = pdata.get("level", 1)
+        old_exp = pdata.get("exp", 0)
+        old_titles = pdata.get("titles", [])
+        old_equipped = pdata.get("equippedTitle", "")
+        old_achievements = pdata.get("achievements", [])
+        old_inventory = pdata.get("inventory", {})
+        old_total_sign = pdata.get("totalSignInDays", 0)
+        old_work_count = pdata.get("workCount", 0)
+        old_purchase_count = pdata.get("purchaseCount", 0)
+        old_train_count = pdata.get("trainSuccessCount", 0)
+        old_duel_stats = pdata.get("duelStats", {"wins": 0, "losses": 0, "total": 0})
+        old_total_tasks = pdata.get("totalTasksCompleted", 0)
+        old_claimed = pdata.get("claimedRewards", [])
+
         # 重置数据
         pdata["currency"] = 0
         pdata["slave"] = []
@@ -130,6 +145,25 @@ async def perform_weekly_reset(group_id: int) -> str:
         pdata["lastResetWeek"] = current_week
         if nickname:
             pdata["nickname"] = nickname
+
+        # 恢复扩展字段
+        pdata["level"] = old_level
+        pdata["exp"] = old_exp
+        pdata["titles"] = old_titles
+        pdata["equippedTitle"] = old_equipped
+        pdata["achievements"] = old_achievements
+        pdata["inventory"] = old_inventory
+        pdata["totalSignInDays"] = old_total_sign
+        pdata["workCount"] = old_work_count
+        pdata["purchaseCount"] = old_purchase_count
+        pdata["trainSuccessCount"] = old_train_count
+        pdata["duelStats"] = old_duel_stats
+        pdata["totalTasksCompleted"] = old_total_tasks
+        pdata["claimedRewards"] = old_claimed
+        pdata["dailyTasks"] = []
+        pdata["dailyTaskDate"] = ""
+        pdata["dailyTaskProgress"] = {}
+        pdata["continuousSignInDays"] = 0
 
         await save_player(group_id, pid, pdata)
 

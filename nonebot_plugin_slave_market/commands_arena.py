@@ -7,6 +7,9 @@ from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent, MessageSegment
 from .config import plugin_config
 from .storage import load_player, save_player
 from .utils import get_member_nickname, check_permission
+from .extension.config import ext_config
+from .extension.utils import give_exp_and_track
+from .extension.group_storage import record_season_stat
 
 arena_cmd = on_command("决斗", priority=5, block=True)
 
@@ -81,6 +84,15 @@ async def _(bot: Bot, event: GroupMessageEvent):
 
         slave1_data["lastBattleTime"] = now
         slave2_data["lastBattleTime"] = now
+        # 扩展追踪
+        duel_stats = user_data.setdefault("duelStats", {"wins": 0, "losses": 0, "total": 0})
+        duel_stats["wins"] += 1
+        duel_stats["total"] += 1
+        if ext_config.level.enabled:
+            from .extension.utils import add_exp
+            add_exp(user_data, ext_config.level.arenaExp)
+        give_exp_and_track(user_data, 0, "arena")
+        await record_season_stat(group_id, user_id, "duelWins")
         await save_player(group_id, slave1_id, slave1_data)
         await save_player(group_id, slave2_id, slave2_data)
         await save_player(group_id, user_id, user_data)
@@ -102,6 +114,14 @@ async def _(bot: Bot, event: GroupMessageEvent):
 
         slave1_data["lastBattleTime"] = now
         slave2_data["lastBattleTime"] = now
+        # 扩展追踪（失败也给少量经验）
+        duel_stats = user_data.setdefault("duelStats", {"wins": 0, "losses": 0, "total": 0})
+        duel_stats["losses"] += 1
+        duel_stats["total"] += 1
+        if ext_config.level.enabled:
+            from .extension.utils import add_exp
+            add_exp(user_data, ext_config.level.arenaExp // 2)
+        give_exp_and_track(user_data, 0, "arena")
         await save_player(group_id, slave1_id, slave1_data)
         await save_player(group_id, slave2_id, slave2_data)
         await save_player(group_id, user_id, user_data)

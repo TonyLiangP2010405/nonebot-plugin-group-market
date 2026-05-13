@@ -8,6 +8,9 @@ from nonebot.params import CommandArg
 from .config import plugin_config
 from .storage import ensure_player, load_player, save_player
 from .utils import get_member_nickname, check_permission
+from .extension.config import ext_config
+from .extension.utils import get_work_income_multiplier, give_exp_and_track
+from .extension.group_storage import record_season_stat, get_today_event
 
 work_cmd = on_command("打工", aliases={"工作", "一键打工"}, priority=5, block=True)
 
@@ -66,6 +69,17 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
             max_gold = 100 + user_data["value"] // 10
             gold = random.randint(min_gold, max_gold)
             user_data["currency"] += gold
+
+    # 扩展追踪
+    if ext_config.level.enabled:
+        exp_gain = ext_config.level.workExp
+        if is_batch:
+            exp_gain *= len([r for r in results if "赚了" in r])
+        from .extension.utils import add_exp
+        add_exp(user_data, exp_gain)
+    user_data["workCount"] = user_data.get("workCount", 0) + (len([r for r in results if "赚了" in r]) if is_batch else 1)
+    give_exp_and_track(user_data, 0, "work")
+    await record_season_stat(group_id, user_id, "currencyGrowth", gold if not is_batch else sum([int(r.split("赚了 ")[1].split(" 金币")[0]) for r in results if "赚了" in r]))
 
     user_data["lastWorkingTime"] = now
     await save_player(group_id, user_id, user_data)

@@ -7,6 +7,9 @@ from nonebot.params import CommandArg
 from .config import plugin_config
 from .storage import ensure_player, load_player, save_player, player_exists
 from .utils import get_member_nickname, check_permission
+from .extension.config import ext_config
+from .extension.utils import give_exp_and_track
+from .extension.group_storage import record_season_stat
 
 purchase_cmd = on_command("购买群友", aliases={"购买奴隶"}, priority=5, block=True)
 
@@ -86,6 +89,14 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
 
     target_data["master"] = str(user_id)
     target_data["value"] = int(target_data["value"] * 1.5)
+
+    # 扩展追踪
+    if ext_config.level.enabled:
+        from .extension.utils import add_exp
+        add_exp(user_data, ext_config.level.purchaseExp)
+    user_data["purchaseCount"] = user_data.get("purchaseCount", 0) + 1
+    give_exp_and_track(user_data, 0, "purchase")
+    await record_season_stat(group_id, user_id, "purchaseCount")
 
     await save_player(group_id, user_id, user_data)
     await save_player(group_id, target_id, target_data)

@@ -137,36 +137,94 @@ async def ensure_player(group_id: int, user_id: int, nickname: str = "") -> Dict
 
     data = await load_player(group_id, user_id)
     if data is None:
-        data = {
-            "currency": 0,
-            "slave": [],
-            "value": 100,
-            "lastWorkingTime": 0,
-            "master": "",
-            "nickname": nickname,
-            "lastPurchaseTime": 0,
-            "lastTrainedTime": 0,
-            "lastBattleTime": 0,
-            "lastRankingTime": 0,
-            "lastRobTime": 0,
-            "buyBackTimes": 0,
-            "lastBuyBackTime": 0,
-            "bank": {
-                "balance": 0,
-                "level": 1,
-                "limit": 1000,
-                "upgradePrice": 100,
-                "lastInterestTime": 0
-            },
-            "ranking": {"score": 1000, "tier": "青铜", "matches": 0},
-            "weeklyResets": 0,
-            "lastResetTime": 0,
-            "lastResetWeek": 0
-        }
+        data = _new_player_data(nickname)
         await save_player(group_id, user_id, data)
-    elif nickname and data.get("nickname") != nickname:
-        data["nickname"] = nickname
+    else:
+        # 旧数据迁移：补全扩展字段
+        _migrate_player_data(data)
+        if nickname and data.get("nickname") != nickname:
+            data["nickname"] = nickname
         await save_player(group_id, user_id, data)
+
+    return data
+
+
+def _new_player_data(nickname: str) -> dict:
+    """创建新玩家数据"""
+    return {
+        "currency": 0,
+        "slave": [],
+        "value": 100,
+        "lastWorkingTime": 0,
+        "master": "",
+        "nickname": nickname,
+        "lastPurchaseTime": 0,
+        "lastTrainedTime": 0,
+        "lastBattleTime": 0,
+        "lastRankingTime": 0,
+        "lastRobTime": 0,
+        "buyBackTimes": 0,
+        "lastBuyBackTime": 0,
+        "bank": {
+            "balance": 0,
+            "level": 1,
+            "limit": 1000,
+            "upgradePrice": 100,
+            "lastInterestTime": 0
+        },
+        "ranking": {"score": 1000, "tier": "青铜", "matches": 0},
+        "weeklyResets": 0,
+        "lastResetTime": 0,
+        "lastResetWeek": 0,
+        # 扩展字段
+        "level": 1,
+        "exp": 0,
+        "titles": [],
+        "equippedTitle": "",
+        "achievements": [],
+        "inventory": {},
+        "dailyTasks": [],
+        "dailyTaskDate": "",
+        "dailyTaskProgress": {},
+        "lastSignInDate": "",
+        "continuousSignInDays": 0,
+        "totalSignInDays": 0,
+        "workCount": 0,
+        "purchaseCount": 0,
+        "trainSuccessCount": 0,
+        "duelStats": {"wins": 0, "losses": 0, "total": 0},
+        "totalTasksCompleted": 0,
+        "claimedRewards": [],
+        "profileStats": {},
+    }
+
+
+def _migrate_player_data(data: dict):
+    """迁移旧数据，补全扩展字段"""
+    defaults = {
+        "level": 1,
+        "exp": 0,
+        "titles": [],
+        "equippedTitle": "",
+        "achievements": [],
+        "inventory": {},
+        "dailyTasks": [],
+        "dailyTaskDate": "",
+        "dailyTaskProgress": {},
+        "lastSignInDate": "",
+        "continuousSignInDays": 0,
+        "totalSignInDays": 0,
+        "workCount": 0,
+        "purchaseCount": 0,
+        "trainSuccessCount": 0,
+        "duelStats": {"wins": 0, "losses": 0, "total": 0},
+        "totalTasksCompleted": 0,
+        "claimedRewards": [],
+        "profileStats": {},
+    }
+    for key, val in defaults.items():
+        if key not in data:
+            data[key] = val
 
     return data
 
