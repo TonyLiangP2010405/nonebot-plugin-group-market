@@ -1,4 +1,4 @@
-"""排行榜指令 (#奴隶市场 / #排行榜)"""
+"""排行榜指令 (/奴隶市场 /排行榜)"""
 from nonebot import on_command, logger
 from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
 

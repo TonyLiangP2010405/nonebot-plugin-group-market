@@ -15,8 +15,8 @@ __plugin_meta__ = PluginMetadata(
     name="群友市场",
     description="适用于 QQ 群聊的群友市场经济小游戏，包含打工、购买群友、训练、决斗、银行、排行榜、每日任务、等级、成就、防刷屏等玩法。",
     usage=(
-        "发送 #群友市场帮助 或 #奴隶帮助 查看完整玩法说明。\n"
-        "核心命令: #打工 #购买群友 #训练 #决斗 #排位赛 #银行 #签到 #每日任务 #商店"
+        "发送 /群友市场帮助 或 /奴隶帮助 查看完整玩法说明。\n"
+        "核心命令: /打工 /购买群友 /训练 /决斗 /排位赛 /银行 /签到 /每日任务 /商店"
     ),
     type="application",
     homepage="https://github.com/TonyLiangP2010405/nonebot-plugin-group-market",

@@ -67,7 +67,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
     if not owned:
         lines.append("(暂无称号)")
 
-    lines.append("\n佩戴: #佩戴称号 称号名")
+    lines.append("\n佩戴: /佩戴称号 称号名")
     await title_cmd.finish("\n".join(lines))
 
 

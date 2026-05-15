@@ -17,18 +17,18 @@ nonebot_plugin_slave_market/
   storage.py           - JSON 文件存储，群隔离，文件锁
   utils.py             - 通用工具（昵称获取、权限检查、周数计算）
   commands.py          - 指令入口，导入所有子模块触发注册
-  commands_help.py     - #奴隶帮助
-  commands_work.py     - #打工 / #一键打工
-  commands_purchase.py - #购买群友
-  commands_slave.py    - #我的奴隶 / #放生奴隶
-  commands_train.py    - #训练 / #一键训练
-  commands_arena.py    - #决斗
-  commands_ranking.py  - #排位赛 / #参加排位赛
-  commands_rankings.py - #奴隶市场 / #排行榜
-  commands_bank.py     - #存款 #取款 #升级信用 #银行信息 #领取利息 #转账
-  commands_rob.py      - #抢劫
-  commands_buyback.py  - #回购自己
-  commands_weekly.py   - #奴隶重置状态 #手动奴隶重置 #奴隶重置帮助 #上周排行榜
+  commands_help.py     - /奴隶帮助
+  commands_work.py     - /打工 / /一键打工
+  commands_purchase.py - /购买群友
+  commands_slave.py    - /我的奴隶 / /放生奴隶
+  commands_train.py    - /训练 / /一键训练
+  commands_arena.py    - /决斗
+  commands_ranking.py  - /排位赛 / /参加排位赛
+  commands_rankings.py - /奴隶市场 / /排行榜
+  commands_bank.py     - /存款 /取款 /升级信用 /银行信息 /领取利息 /转账
+  commands_rob.py      - /抢劫
+  commands_buyback.py  - /回购自己
+  commands_weekly.py   - /奴隶重置状态 /手动奴隶重置 /奴隶重置帮助 /上周排行榜
   commands_update.py   - (空壳/更新指令)
   exit_handler.py      - (空壳/退出处理)
   weekly_reset_task.py - 每周重置定时任务
@@ -83,28 +83,28 @@ nonebot_plugin_slave_market/
 
 | 指令 | 别名 | 文件 |
 |------|------|------|
-| #奴隶帮助 | nl帮助, 群友帮助, 奴隶菜单, nl菜单 | commands_help.py |
-| #打工 | 工作, 一键打工 | commands_work.py |
-| #购买群友 | 购买奴隶 | commands_purchase.py |
-| #我的奴隶 | 我的群友 | commands_slave.py |
-| #放生奴隶 | - | commands_slave.py |
-| #训练 | 一键训练 | commands_train.py |
-| #决斗 | - | commands_arena.py |
-| #排位赛 | - | commands_ranking.py |
-| #参加排位赛 | 参加排位 | commands_ranking.py |
-| #存款 | 一键存款 | commands_bank.py |
-| #取款 | - | commands_bank.py |
-| #升级信用 | 一键升级信用 | commands_bank.py |
-| #银行信息 | - | commands_bank.py |
-| #领取利息 | - | commands_bank.py |
-| #转账 | - | commands_bank.py |
-| #奴隶市场 | 排行榜 | commands_rankings.py |
-| #回购自己 | - | commands_buyback.py |
-| #抢劫 | rob | commands_rob.py |
-| #奴隶重置状态 | - | commands_weekly.py |
-| #手动奴隶重置 | - | commands_weekly.py |
-| #奴隶重置帮助 | - | commands_weekly.py |
-| #上周排行榜 | - | commands_weekly.py |
+| /奴隶帮助 | nl帮助, 群友帮助, 奴隶菜单, nl菜单 | commands_help.py |
+| /打工 | 工作, 一键打工 | commands_work.py |
+| /购买群友 | 购买奴隶 | commands_purchase.py |
+| /我的奴隶 | 我的群友 | commands_slave.py |
+| /放生奴隶 | - | commands_slave.py |
+| /训练 | 一键训练 | commands_train.py |
+| /决斗 | - | commands_arena.py |
+| /排位赛 | - | commands_ranking.py |
+| /参加排位赛 | 参加排位 | commands_ranking.py |
+| /存款 | 一键存款 | commands_bank.py |
+| /取款 | - | commands_bank.py |
+| /升级信用 | 一键升级信用 | commands_bank.py |
+| /银行信息 | - | commands_bank.py |
+| /领取利息 | - | commands_bank.py |
+| /转账 | - | commands_bank.py |
+| /奴隶市场 | 排行榜 | commands_rankings.py |
+| /回购自己 | - | commands_buyback.py |
+| /抢劫 | rob | commands_rob.py |
+| /奴隶重置状态 | - | commands_weekly.py |
+| /手动奴隶重置 | - | commands_weekly.py |
+| /奴隶重置帮助 | - | commands_weekly.py |
+| /上周排行榜 | - | commands_weekly.py |
 
 ## 每周重置逻辑
 

@@ -47,7 +47,7 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     else:
         text = args.extract_plain_text().strip()
         if not text.isdigit():
-            await deposit_cmd.finish("请输入存款金额\n例如: #存款 100")
+            await deposit_cmd.finish("请输入存款金额\n例如: /存款 100")
         amount = int(text)
 
     if amount <= 0:
@@ -98,7 +98,7 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
 
     text = args.extract_plain_text().strip()
     if not text.isdigit():
-        await withdraw_cmd.finish("请输入取款金额\n例如: #取款 100")
+        await withdraw_cmd.finish("请输入取款金额\n例如: /取款 100")
     amount = int(text)
 
     if amount <= 0:
@@ -268,7 +268,7 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     text = args.extract_plain_text().strip()
     parts = text.split()
     if not parts[0].isdigit():
-        await transfer_cmd.finish("请输入转账金额\n例如: #转账 100 @用户")
+        await transfer_cmd.finish("请输入转账金额\n例如: /转账 100 @用户")
     amount = int(parts[0])
 
     target_id = None

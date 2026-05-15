@@ -46,7 +46,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
 
     tasks = data.get("dailyTasks", [])
     if not tasks:
-        await daily_task_cmd.finish("今天没有任务，试试 #刷新任务")
+        await daily_task_cmd.finish("今天没有任务，试试 /刷新任务")
 
     lines = [f"📋 {nickname} 的每日任务"]
     completed_count = 0
@@ -61,7 +61,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
         )
 
     lines.append(f"\n进度: {completed_count}/{len(tasks)}")
-    lines.append("提示: 完成任务后输入 #领取任务奖励")
+    lines.append("提示: 完成任务后输入 /领取任务奖励")
 
     await save_player(group_id, user_id, data)
     await daily_task_cmd.finish("\n".join(lines))
@@ -151,4 +151,4 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     data["dailyTaskProgress"] = {}
 
     await save_player(group_id, user_id, data)
-    await refresh_task_cmd.finish("🔄 任务已刷新！输入 #每日任务 查看新任务。")
+    await refresh_task_cmd.finish("🔄 任务已刷新！输入 /每日任务 查看新任务。")

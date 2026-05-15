@@ -108,7 +108,7 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
 
     text = args.extract_plain_text().strip()
     if not text.isdigit():
-        await admin_set_work_cd.finish("请输入分钟数\n例如: #设置打工冷却 20")
+        await admin_set_work_cd.finish("请输入分钟数\n例如: /设置打工冷却 20")
 
     minutes = int(text)
     if minutes < 1 or minutes > 1440:
@@ -129,7 +129,7 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
 
     text = args.extract_plain_text().strip()
     if not text.isdigit():
-        await admin_set_group_cd.finish("请输入秒数\n例如: #设置群游戏间隔 5")
+        await admin_set_group_cd.finish("请输入秒数\n例如: /设置群游戏间隔 5")
 
     seconds = int(text)
     if seconds < 0 or seconds > 60:

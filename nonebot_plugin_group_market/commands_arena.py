@@ -40,7 +40,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
             at_ids.append(int(seg.data["qq"]))
 
     if len(at_ids) != 2:
-        await arena_cmd.finish("请 @ 两个奴隶进行决斗\n例如: #决斗 @奴隶1 @奴隶2")
+        await arena_cmd.finish("请 @ 两个奴隶进行决斗\n例如: /决斗 @奴隶1 @奴隶2")
 
     slave1_id, slave2_id = at_ids
 

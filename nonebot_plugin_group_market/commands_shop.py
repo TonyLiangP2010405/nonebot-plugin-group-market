@@ -37,9 +37,9 @@ async def _(bot: Bot, event: GroupMessageEvent):
         lines.append(f"  {item['description']}")
 
     lines.append("━━━━━━━━━━━━━━")
-    lines.append("购买: #购买道具 道具名")
-    lines.append("使用: #使用道具 道具名")
-    lines.append("赠送: #赠送道具 @用户 道具名")
+    lines.append("购买: /购买道具 道具名")
+    lines.append("使用: /使用道具 道具名")
+    lines.append("赠送: /赠送道具 @用户 道具名")
 
     await shop_cmd.finish("\n".join(lines))
 
@@ -65,7 +65,7 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
 
     item_name = args.extract_plain_text().strip()
     if not item_name:
-        await buy_item_cmd.finish("请输入要购买的道具名\n例如: #购买道具 打工加成卡")
+        await buy_item_cmd.finish("请输入要购买的道具名\n例如: /购买道具 打工加成卡")
 
     # 模糊匹配
     item = None
@@ -75,7 +75,7 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
             break
 
     if item is None:
-        await buy_item_cmd.finish(f"❌ 没有找到道具 '{item_name}'，输入 #商店 查看列表")
+        await buy_item_cmd.finish(f"❌ 没有找到道具 '{item_name}'，输入 /商店 查看列表")
 
     price = item["price"]
     if data["currency"] < price:
@@ -120,7 +120,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
 
     inv = data.get("inventory", {})
     if not inv:
-        await my_items_cmd.finish("🎒 背包空空如也\n去 #商店 买点东西吧！")
+        await my_items_cmd.finish("🎒 背包空空如也\n去 /商店 买点东西吧！")
 
     lines = [f"🎒 {nickname} 的背包"]
     lines.append("━━━━━━━━━━━━━━")
@@ -129,7 +129,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
         lines.append(f"• {name} x{count}")
 
     lines.append("━━━━━━━━━━━━━━")
-    lines.append("使用: #使用道具 道具名")
+    lines.append("使用: /使用道具 道具名")
     await my_items_cmd.finish("\n".join(lines))
 
 
@@ -169,7 +169,7 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
         await use_item_cmd.finish(f"❌ 没有找到道具 '{item_name}'")
 
     if not consume_item(data, item_id):
-        await use_item_cmd.finish(f"❌ 你没有 {item_cfg['name']}，去 #商店 购买吧")
+        await use_item_cmd.finish(f"❌ 你没有 {item_cfg['name']}，去 /商店 购买吧")
 
     # 道具效果
     result_text = ""
@@ -184,7 +184,7 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
         bank["limit"] = bank.get("limit", 1000) + 500
         result_text = "银行限额 +500！"
     elif item_id == "task_refresh":
-        result_text = "任务刷新券已准备就绪，使用 #刷新任务 时自动消耗"
+        result_text = "任务刷新券已准备就绪，使用 /刷新任务 时自动消耗"
     elif item_id == "random_box":
         reward = random_box_reward()
         if reward["type"] == "currency":

@@ -68,7 +68,7 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
         await bounty_post_cmd.finish("不能悬赏自己！")
 
     if amount <= 0:
-        await bounty_post_cmd.finish("请输入悬赏金额\n例如: #发布悬赏 @用户 500")
+        await bounty_post_cmd.finish("请输入悬赏金额\n例如: /发布悬赏 @用户 500")
 
     cfg = ext_config.bounty
     if amount < cfg.minAmount:
@@ -135,7 +135,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
     active = [b for b in bounties if not b.get("claimed")]
 
     if not active:
-        await bounty_list_cmd.finish("📋 当前没有活跃的悬赏\n发布悬赏: #发布悬赏 @用户 金额")
+        await bounty_list_cmd.finish("📋 当前没有活跃的悬赏\n发布悬赏: /发布悬赏 @用户 金额")
 
     lines = ["📋 悬赏列表"]
     for b in active[:10]:
@@ -144,7 +144,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
             f"  目标: {b['target_name']} | 发布者: {b['poster_name']}"
         )
 
-    lines.append("\n领取: #领取悬赏 @目标")
+    lines.append("\n领取: /领取悬赏 @目标")
     await bounty_list_cmd.finish("\n".join(lines))
 
 
@@ -226,7 +226,7 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
 
     text = args.extract_plain_text().strip()
     if not text.isdigit():
-        await bounty_cancel_cmd.finish("请输入悬赏ID\n例如: #取消悬赏 123456")
+        await bounty_cancel_cmd.finish("请输入悬赏ID\n例如: /取消悬赏 123456")
 
     bounty_id = int(text)
     bounties = await get_bounty_data(group_id)
