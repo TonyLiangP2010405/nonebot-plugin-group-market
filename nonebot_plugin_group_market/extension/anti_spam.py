@@ -3,9 +3,8 @@
 """
 import time
 from typing import Dict, Optional, Tuple
-from nonebot import logger
+from nonebot import logger, get_driver
 from nonebot.adapters.onebot.v11 import GroupMessageEvent
-from nonebot.permission import SUPERUSER
 
 from .config import ext_config
 
@@ -161,7 +160,7 @@ def check_cooldown(event: GroupMessageEvent, cmd_key: str) -> Tuple[bool, Option
     user_id = event.user_id
 
     # 管理员不受普通限制
-    if SUPERUSER(event):
+    if str(event.user_id) in get_driver().config.superusers:
         _record_cmd(group_id)
         return True, None
 

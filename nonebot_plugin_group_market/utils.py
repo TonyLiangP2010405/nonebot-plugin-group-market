@@ -1,9 +1,8 @@
 """通用工具函数"""
 import datetime
 from typing import Optional
-from nonebot import logger
+from nonebot import logger, get_driver
 from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
-from nonebot.permission import SUPERUSER
 
 from .config import plugin_config
 
@@ -15,7 +14,7 @@ def format_currency(value: float) -> float:
 
 def check_permission(event: GroupMessageEvent) -> bool:
     """检查用户是否有权限跳过冷却"""
-    if SUPERUSER(event):
+    if str(event.user_id) in get_driver().config.superusers:
         return True
     if str(event.user_id) in plugin_config.ignoreCDUsers:
         return True

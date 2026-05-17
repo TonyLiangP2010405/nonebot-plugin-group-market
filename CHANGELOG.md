@@ -1,5 +1,10 @@
 # 更新日志
 
+## [0.3.4] - 2026-05-17
+
+### 修复
+- 修复 `extension/anti_spam.py` 与 `utils.py` 中 `SUPERUSER` 权限检查调用方式错误导致的 `TypeError`（Python 3.14 / NoneBot 兼容性）
+
 ## [0.3.3] - 2026-05-16
 
 ### 变更
