@@ -20,24 +20,24 @@ _✨ 适用于 QQ 群聊的群友市场经济小游戏 ✨_
 
 </div>
 
-适用于 **QQ 群聊** 的 NoneBot2 群友市场经济小游戏，包含打工、购买群友、训练、决斗、银行、排行榜、每日任务、等级、成就、防刷屏等玩法。
+适用于 **QQ 群聊** 的 NoneBot2 群友市场经济小游戏,包含打工、购买群友、训练、决斗、银行、排行榜、每日任务、等级、成就、防刷屏等玩法。
 
 > 从 Yunzai-Bot V3 插件 [Slave-Market](https://gitee.com/Tloml-Starry/Slave-Market) 移植并大幅扩展而来。
 
 > [!NOTE]
-> 本仓库自带了一个发布工作流，你可以使用此工作流自动发布你的插件到 PyPI
+> 本仓库自带了一个发布工作流,你可以使用此工作流自动发布你的插件到 PyPI
 
 <details>
 <summary>配置发布工作流</summary>
 
-1. 前往 https://pypi.org/manage/account/#api-tokens 并创建一个新的 API 令牌。创建成功后不要关闭页面，不然你将无法再次查看此令牌。
-2. 在单独的浏览器选项卡或窗口中，打开 [Actions secrets and variables](./settings/secrets/actions) 页面。你也可以在 Settings - Secrets and variables - Actions 中找到此页面。
-3. 点击 New repository secret 按钮，创建一个名为 `PYPI_API_TOKEN` 的新令牌，并从第一步复制粘贴令牌。
+1. 前往 https://pypi.org/manage/account/#api-tokens 并创建一个新的 API 令牌。创建成功后不要关闭页面,不然你将无法再次查看此令牌。
+2. 在单独的浏览器选项卡或窗口中,打开 [Actions secrets and variables](./settings/secrets/actions) 页面。你也可以在 Settings - Secrets and variables - Actions 中找到此页面。
+3. 点击 New repository secret 按钮,创建一个名为 `PYPI_API_TOKEN` 的新令牌,并从第一步复制粘贴令牌。
 
 </details>
 
 > [!IMPORTANT]
-> 这个发布工作流需要 pyproject.toml 文件，并且只支持 [PEP 621](https://peps.python.org/pep-0621/) 标准的 pyproject.toml 文件
+> 这个发布工作流需要 pyproject.toml 文件,并且只支持 [PEP 621](https://peps.python.org/pep-0621/) 标准的 pyproject.toml 文件
 
 <details>
 <summary>触发发布工作流</summary>
@@ -55,17 +55,17 @@ _✨ 适用于 QQ 群聊的群友市场经济小游戏 ✨_
 
 ## 📖 介绍
 
-**群友市场** 是一个适用于 QQ 群聊的 NoneBot2 文字游戏插件。玩家可以在群内通过打工赚取金币，购买其他群友作为"奴隶"（游戏内称呼），训练、决斗奴隶，参与排位赛，使用银行系统存取金币赚取利息。
+**群友市场** 是一个适用于 QQ 群聊的 NoneBot2 文字游戏插件。玩家可以在群内通过打工赚取金币,购买其他群友作为"奴隶"(游戏内称呼),训练、决斗奴隶,参与排位赛,使用银行系统存取金币赚取利息。
 
 v0.2.0 新增了签到、等级、成就、每日任务、道具商店、随机事件、称号、悬赏、赛季等扩展玩法。
 
-v0.3.0 新增了多层防刷屏系统，包括用户级冷却、群全局冷却、洪水保护、安静模式等，让游戏更适合长期运行。
+v0.3.0 新增了多层防刷屏系统,包括用户级冷却、群全局冷却、洪水保护、安静模式等,让游戏更适合长期运行。
 
 ## 💿 安装
 
 <details open>
 <summary>使用 nb-cli 安装</summary>
-在 nonebot2 项目的根目录下打开命令行，输入以下指令即可安装
+在 nonebot2 项目的根目录下打开命令行,输入以下指令即可安装
 
     nb plugin install nonebot-plugin-group-market
 
@@ -73,7 +73,7 @@ v0.3.0 新增了多层防刷屏系统，包括用户级冷却、群全局冷却�
 
 <details>
 <summary>使用包管理器安装</summary>
-在 nonebot2 项目的插件目录下，打开命令行，根据你使用的包管理器，输入相应的安装命令
+在 nonebot2 项目的插件目录下,打开命令行,根据你使用的包管理器,输入相应的安装命令
 
 <details>
 <summary>pip</summary>
@@ -96,7 +96,7 @@ v0.3.0 新增了多层防刷屏系统，包括用户级冷却、群全局冷却�
     conda install nonebot-plugin-group-market
 </details>
 
-打开 nonebot2 项目根目录下的 `pyproject.toml` 文件，在 `[tool.nonebot]` 部分追加写入
+打开 nonebot2 项目根目录下的 `pyproject.toml` 文件,在 `[tool.nonebot]` 部分追加写入
 
     plugins = ["nonebot_plugin_group_market"]
 
@@ -108,19 +108,46 @@ v0.3.0 新增了多层防刷屏系统，包括用户级冷却、群全局冷却�
 
 | 配置项 | 必填 | 默认值 | 说明 |
 |:-----:|:----:|:----:|:----:|
-| `slavemarket__work__cooldown` | 否 | `3600` | 打工冷却时间（秒） |
-| `slavemarket__purchase__cooldown` | 否 | `3600` | 购买冷却时间（秒） |
-| `slavemarket__training__cooldown` | 否 | `7200` | 训练冷却时间（秒） |
-| `slavemarket__arena__cooldown` | 否 | `7200` | 决斗冷却时间（秒） |
+| `slavemarket__work__cooldown` | 否 | `3600` | 打工冷却时间(秒) |
+| `slavemarket__purchase__cooldown` | 否 | `3600` | 购买冷却时间(秒) |
+| `slavemarket__training__cooldown` | 否 | `7200` | 训练冷却时间(秒) |
+| `slavemarket__arena__cooldown` | 否 | `7200` | 决斗冷却时间(秒) |
 | `slavemarket__bank__initialLimit` | 否 | `1000` | 银行初始存款限额 |
 | `slavemarket__weeklyReset__enabled` | 否 | `true` | 是否启用每周重置 |
 | `slavemarket__antiSpam__enabled` | 否 | `true` | 是否启用防刷屏 |
 | `slavemarket__antiSpam__quietMode__enabled` | 否 | `true` | 是否启用安静模式 |
-| `slavemarket__antiSpam__groupFloodProtection__windowSeconds` | 否 | `60` | 洪水保护统计窗口（秒） |
+| `slavemarket__antiSpam__groupFloodProtection__windowSeconds` | 否 | `60` | 洪水保护统计窗口(秒) |
 | `slavemarket__antiSpam__groupFloodProtection__maxCommands` | 否 | `20` | 窗口内最大命令数 |
 | `slavemarket__antiSpam__groupFloodProtection__lockSeconds` | 否 | `300` | 洪水锁定持续时间（秒） |
+| `slavemarket__ignoreCDUsers` | 否 | `[]` | 忽略冷却的用户 QQ 号列表（逗号分隔），这些人玩游戏不触发冷却 |
 
-> 所有配置均有默认值，零配置即可运行。
+### 管理员权限
+
+本插件的管理命令（如 `/开启安静模式`、`/关闭防刷屏`、`/设置打工冷却` 等）仅对 **NoneBot SUPERUSER** 开放。
+
+在 `.env` 中配置：
+
+```env
+SUPERUSERS=["你的QQ号"]
+```
+
+支持多个：
+
+```env
+SUPERUSERS=["123456789", "987654321"]
+```
+
+> ⚠️ 目前管理命令不认群里的群主/管理员身份，只认 `SUPERUSERS` 配置。
+
+### 冷却白名单
+
+如果只想让某些朋友跳过冷却（不给他们管理权限），可以配置：
+
+```env
+slavemarket__ignoreCDUsers=["QQ号1", "QQ号2"]
+```
+
+这些人玩游戏不会触发任何冷却，但也不能使用管理命令。
 
 ## 🎉 使用
 
@@ -129,13 +156,13 @@ v0.3.0 新增了多层防刷屏系统，包括用户级冷却、群全局冷却�
 | 指令 | 权限 | 需要@ | 范围 | 说明 |
 |:-----:|:----:|:----:|:----:|:----:|
 | /奴隶帮助 | 群员 | 否 | 群聊 | 查看帮助 |
-| /打工 | 群员 | 否 | 群聊 | 赚取金币（冷却20分钟） |
-| /购买群友 @用户 | 群员 | 是 | 群聊 | 购买群友（冷却30分钟） |
+| /打工 | 群员 | 否 | 群聊 | 赚取金币(冷却20分钟) |
+| /购买群友 @用户 | 群员 | 是 | 群聊 | 购买群友(冷却30分钟) |
 | /我的奴隶 | 群员 | 否 | 群聊 | 查看自己的奴隶 |
-| /训练 @用户 | 群员 | 是 | 群聊 | 训练奴隶（冷却45分钟） |
-| /决斗 @用户1 @用户2 | 群员 | 是 | 群聊 | 奴隶决斗（冷却30分钟） |
+| /训练 @用户 | 群员 | 是 | 群聊 | 训练奴隶(冷却45分钟) |
+| /决斗 @用户1 @用户2 | 群员 | 是 | 群聊 | 奴隶决斗(冷却30分钟) |
 | /排位赛 | 群员 | 否 | 群聊 | 查看排位信息 |
-| /参加排位赛 @用户 | 群员 | 是 | 群聊 | 参加排位（冷却30分钟） |
+| /参加排位赛 @用户 | 群员 | 是 | 群聊 | 参加排位(冷却30分钟) |
 | /存款 数量 | 群员 | 否 | 群聊 | 银行存款 |
 | /取款 数量 | 群员 | 否 | 群聊 | 银行取款 |
 | /升级信用 | 群员 | 否 | 群聊 | 升级银行等级 |
@@ -183,8 +210,8 @@ v0.3.0 新增了多层防刷屏系统，包括用户级冷却、群全局冷却�
 
 ## 📄 许可证
 
-本项目使用 [木兰宽松许可证，第2版](./LICENSE) 开源。
+本项目使用 [木兰宽松许可证,第2版](./LICENSE) 开源。
 
 ---
 
-*若从旧版 `nonebot-plugin-slave-market` 迁移，旧数据完全兼容，详见 [PORTING_NOTES.md](./PORTING_NOTES.md)。*
+*若从旧版 `nonebot-plugin-slave-market` 迁移,旧数据完全兼容,详见 [PORTING_NOTES.md](./PORTING_NOTES.md)。*
