@@ -1,8 +1,7 @@
 """管理员防刷屏管理命令"""
 import re
-from nonebot import on_command
+from nonebot import on_command, get_driver
 from nonebot.adapters.onebot.v11 import Bot, GroupMessageEvent
-from nonebot.permission import SUPERUSER
 from nonebot.params import CommandArg
 
 from .extension.anti_spam import (
@@ -23,10 +22,8 @@ admin_set_group_cd = on_command("设置群游戏间隔", aliases={"设置群间�
 
 
 def _is_admin(event: GroupMessageEvent) -> bool:
-    """检查是否为群管理员或超管"""
-    if SUPERUSER(event):
-        return True
-    return False
+    """检查是否为 SUPERUSER（.env 中 SUPERUSERS 配置的 QQ 号）"""
+    return str(event.user_id) in get_driver().config.superusers
 
 
 @admin_cooldown_status.handle()

@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-group-market"
-version = "0.3.6"
+version = "0.3.7"
 description = "适用于 QQ 群聊的群友市场经济小游戏，包含打工、购买群友、训练、决斗、银行、排行榜、每日任务、等级、成就、防刷屏等玩法。"
 readme = "README.md"
 license = {text = "Mulan PSL v2"}
