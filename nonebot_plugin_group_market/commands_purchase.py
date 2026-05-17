@@ -67,13 +67,8 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
         if remaining > 0:
             await purchase_cmd.finish(f"⏳ 购买冷却中...\n剩余: {remaining // 3600}小时{remaining % 3600 // 60}分钟")
 
-    # 目标玩家必须存在
-    if not await player_exists(group_id, target_id):
-        await purchase_cmd.finish("该用户还没有参与游戏")
-
-    target_data = await load_player(group_id, target_id)
-    if not target_data:
-        await purchase_cmd.finish("该用户数据不存在")
+    # 确保目标玩家数据存在（未参与过游戏的群友也可以被购买）
+    target_data = await ensure_player(group_id, target_id, target_nick)
 
     # 不能购买已有主人的
     if target_data.get("master") and target_data["master"] != str(user_id):
