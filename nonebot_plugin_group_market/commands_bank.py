@@ -66,6 +66,11 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
 
     user_data["currency"] -= amount
     bank["balance"] += amount
+
+    # 追踪每日任务进度
+    from .extension.utils import track_task_progress
+    track_task_progress(user_data, "bank_deposit")
+
     await save_player(group_id, user_id, user_data)
 
     await deposit_cmd.finish(
