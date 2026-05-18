@@ -74,15 +74,37 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
         target_data["currency"] -= rob_amount
         await save_player(group_id, user_id, user_data)
         await save_player(group_id, target_id, target_data)
-        await rob_cmd.finish(
+        reply = (
             f"🔪 抢劫成功！\n"
             f"你从 {target_nick} 手中抢到了 {rob_amount} 金币！"
         )
+
+        # BOT 陪玩触发
+        try:
+            from .bot_actions import try_bot_auto_action
+            bot_msg = await try_bot_auto_action(bot, group_id, user_id, "rob")
+            if bot_msg:
+                reply += "\n\n" + bot_msg
+        except Exception:
+            pass
+
+        await rob_cmd.finish(reply)
     else:
         penalty = min(int(user_data["currency"] * cfg.penalty), 50)
         user_data["currency"] -= penalty
         await save_player(group_id, user_id, user_data)
-        await rob_cmd.finish(
+        reply = (
             f"😢 抢劫失败！\n"
             f"你被罚款 {penalty} 金币"
         )
+
+        # BOT 陪玩触发
+        try:
+            from .bot_actions import try_bot_auto_action
+            bot_msg = await try_bot_auto_action(bot, group_id, user_id, "rob")
+            if bot_msg:
+                reply += "\n\n" + bot_msg
+        except Exception:
+            pass
+
+        await rob_cmd.finish(reply)

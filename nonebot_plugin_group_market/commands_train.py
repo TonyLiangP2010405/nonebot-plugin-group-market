@@ -87,6 +87,16 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
         user_data["lastTrainedTime"] = now
         await save_player(group_id, user_id, user_data)
         reply = f"📋 {await get_member_nickname(bot, group_id, user_id)} 的一键训练结果:\n" + "\n".join(results)
+
+        # BOT 陪玩触发
+        try:
+            from .bot_actions import try_bot_auto_action
+            bot_msg = await try_bot_auto_action(bot, group_id, user_id, "train")
+            if bot_msg:
+                reply += "\n\n" + bot_msg
+        except Exception:
+            pass
+
         await train_cmd.finish(reply)
     else:
         # 训练指定奴隶
@@ -125,10 +135,32 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
             await record_season_stat(group_id, user_id, "trainCount")
             user_data["lastTrainedTime"] = now
             await save_player(group_id, user_id, user_data)
-            await train_cmd.finish(f"✅ {sname} 训练成功！\n身价 +{increase}")
+            reply = f"✅ {sname} 训练成功！\n身价 +{increase}"
+
+            # BOT 陪玩触发
+            try:
+                from .bot_actions import try_bot_auto_action
+                bot_msg = await try_bot_auto_action(bot, group_id, user_id, "train")
+                if bot_msg:
+                    reply += "\n\n" + bot_msg
+            except Exception:
+                pass
+
+            await train_cmd.finish(reply)
         else:
             sdata["value"] = max(100, sdata["value"] - 20)
             await save_player(group_id, target_id, sdata)
             user_data["lastTrainedTime"] = now
             await save_player(group_id, user_id, user_data)
-            await train_cmd.finish(f"❌ {sname} 训练失败...\n身价 -20")
+            reply = f"❌ {sname} 训练失败...\n身价 -20"
+
+            # BOT 陪玩触发
+            try:
+                from .bot_actions import try_bot_auto_action
+                bot_msg = await try_bot_auto_action(bot, group_id, user_id, "train")
+                if bot_msg:
+                    reply += "\n\n" + bot_msg
+            except Exception:
+                pass
+
+            await train_cmd.finish(reply)

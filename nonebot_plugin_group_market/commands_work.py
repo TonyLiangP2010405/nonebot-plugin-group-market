@@ -95,4 +95,14 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
         reply = f"📋 {nickname} 的一键打工结果:\n" + "\n".join(results)
     else:
         reply = f"✅ {nickname} 打工成功！\n获得金币: {gold}"
+
+    # BOT 陪玩触发
+    try:
+        from .bot_actions import try_bot_auto_action
+        bot_msg = await try_bot_auto_action(bot, group_id, user_id, "work")
+        if bot_msg:
+            reply += "\n\n" + bot_msg
+    except Exception:
+        pass
+
     await work_cmd.finish(reply)

@@ -27,6 +27,12 @@ __plugin_meta__ = PluginMetadata(
 # 导入扩展配置（确保先加载）
 from . import extension
 
+# 导入 BOT 陪玩模块（确保存储和命令加载）
+from . import bot_storage
+from . import bot_strategy
+from . import bot_actions
+from . import bot_commands
+
 # 导入所有指令模块（触发注册）
 from . import commands
 

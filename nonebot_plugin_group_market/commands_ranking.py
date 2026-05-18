@@ -179,8 +179,19 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     await save_player(group_id, target_id, slave_data)
     await save_player(group_id, user_id, user_data)
 
-    await ranking_join_cmd.finish(
+    reply = (
         f"⚔️ {sname} 的排位赛\n"
         f"{result_text}\n"
         f"📊 当前段位: {ranking['tier']} ({ranking['score']}分)"
     )
+
+    # BOT 陪玩触发
+    try:
+        from .bot_actions import try_bot_auto_action
+        bot_msg = await try_bot_auto_action(bot, group_id, user_id, "ranking_join")
+        if bot_msg:
+            reply += "\n\n" + bot_msg
+    except Exception:
+        pass
+
+    await ranking_join_cmd.finish(reply)

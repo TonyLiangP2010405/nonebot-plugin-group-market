@@ -104,7 +104,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
         await save_player(group_id, slave2_id, slave2_data)
         await save_player(group_id, user_id, user_data)
 
-        await arena_cmd.finish(
+        reply = (
             f"⚔️ 决斗结果 ⚔️\n"
             f"{s1_name} VS {s2_name}\n"
             f"🏆 胜利者: {s1_name}\n"
@@ -112,6 +112,17 @@ async def _(bot: Bot, event: GroupMessageEvent):
             f"📈 {s1_name} 身价 +{int(slave1_data['value'] * cfg.valueBonus)}\n"
             f"📉 {s2_name} 身价 -5%"
         )
+
+        # BOT 陪玩触发
+        try:
+            from .bot_actions import try_bot_auto_action
+            bot_msg = await try_bot_auto_action(bot, group_id, user_id, "duel")
+            if bot_msg:
+                reply += "\n\n" + bot_msg
+        except Exception:
+            pass
+
+        await arena_cmd.finish(reply)
     else:
         # slave2 胜
         reward = int(cfg.entryFee * cfg.rewardRate)
@@ -133,7 +144,7 @@ async def _(bot: Bot, event: GroupMessageEvent):
         await save_player(group_id, slave2_id, slave2_data)
         await save_player(group_id, user_id, user_data)
 
-        await arena_cmd.finish(
+        reply = (
             f"⚔️ 决斗结果 ⚔️\n"
             f"{s1_name} VS {s2_name}\n"
             f"🏆 胜利者: {s2_name}\n"
@@ -141,3 +152,14 @@ async def _(bot: Bot, event: GroupMessageEvent):
             f"📈 {s2_name} 身价 +{int(slave2_data['value'] * cfg.valueBonus)}\n"
             f"📉 {s1_name} 身价 -5%"
         )
+
+        # BOT 陪玩触发
+        try:
+            from .bot_actions import try_bot_auto_action
+            bot_msg = await try_bot_auto_action(bot, group_id, user_id, "duel")
+            if bot_msg:
+                reply += "\n\n" + bot_msg
+        except Exception:
+            pass
+
+        await arena_cmd.finish(reply)

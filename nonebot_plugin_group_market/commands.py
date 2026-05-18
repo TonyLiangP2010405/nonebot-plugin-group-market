@@ -36,4 +36,10 @@ from .commands_admin import (
     admin_enable_spam, admin_disable_spam, admin_set_work_cd, admin_set_group_cd
 )
 
+# BOT 陪玩模块
+from .bot_commands import (
+    bot_enable_cmd, bot_disable_cmd, bot_status_cmd,
+    bot_summon_cmd, bot_settings_cmd, bot_reset_cmd
+)
+
 logger.info("[SlaveMarket] 指令模块已注册")

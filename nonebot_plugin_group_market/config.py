@@ -84,6 +84,20 @@ class WeeklyResetConfig(BaseModel):
     preserveData: WeeklyResetPreserveConfig = Field(default_factory=WeeklyResetPreserveConfig)
 
 
+class BotPlayConfig(BaseModel):
+    """BOT 陪玩系统配置"""
+    enabled: bool = Field(default=False, description="BOT陪玩默认开关")
+    actionProbability: float = Field(default=0.15, description="玩家行为触发BOT行动的概率(0-1)")
+    actionCooldown: int = Field(default=600, description="BOT每次行动冷却(秒)")
+    dailyActionLimit: int = Field(default=20, description="BOT每日最大行动次数")
+    summonCooldown: int = Field(default=1800, description="手动召唤BOT冷却(秒)")
+    allowAttack: bool = Field(default=False, description="是否允许BOT主动挑战玩家")
+    allowBuyFromPlayers: bool = Field(default=True, description="是否允许BOT购买群友")
+    messageMode: str = Field(default="simple", description="BOT消息模式 simple/detail")
+    maxPerGroup: int = Field(default=1, description="每群最大BOT数量")
+    strategy: str = Field(default="random", description="BOT默认策略 conservative/capitalist/aggressive/vengeful/random")
+
+
 class SlaveMarketConfig(BaseModel):
     """插件主配置"""
     buyBack: BuyBackConfig = Field(default_factory=BuyBackConfig)
@@ -96,6 +110,7 @@ class SlaveMarketConfig(BaseModel):
     ranking: RankingConfig = Field(default_factory=RankingConfig)
     transfer: TransferConfig = Field(default_factory=TransferConfig)
     weeklyReset: WeeklyResetConfig = Field(default_factory=WeeklyResetConfig)
+    botPlay: BotPlayConfig = Field(default_factory=BotPlayConfig)
     ignoreCDUsers: List[str] = Field(default_factory=list, description="忽略冷却的用户ID列表")
 
 

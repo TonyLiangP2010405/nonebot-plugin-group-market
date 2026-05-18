@@ -103,8 +103,19 @@ async def _(bot: Bot, event: GroupMessageEvent, args=CommandArg()):
     await save_player(group_id, user_id, user_data)
     await save_player(group_id, target_id, target_data)
 
-    await purchase_cmd.finish(
+    reply = (
         f"✅ {nickname} 成功购买了 {target_nick}！\n"
         f"花费: {price} 金币\n"
         f"{target_nick} 的新身价: {target_data['value']} 金币"
     )
+
+    # BOT 陪玩触发
+    try:
+        from .bot_actions import try_bot_auto_action
+        bot_msg = await try_bot_auto_action(bot, group_id, user_id, "purchase")
+        if bot_msg:
+            reply += "\n\n" + bot_msg
+    except Exception:
+        pass
+
+    await purchase_cmd.finish(reply)
